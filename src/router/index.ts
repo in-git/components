@@ -5,13 +5,20 @@ export default createRouter({
   routes: [
     {
       path: '/',
-      component: () => import('@/views/modules/main/Main.vue'),
+      name: '',
+      component: () => import('@/views/modules/home/Home.vue'),
+      children: [],
     },
     {
-      path: '/',
-      name: 'login',
-      meta: { title: '' },
-      component: () => import('@/views/login/login.vue'),
+      path: '/contextmenu',
+      name: 'contextmenu',
+      component: () => import('@/views/modules/contextmenu/index.vue'),
+      children: [],
+    },
+    {
+      path: '/draggable',
+      name: 'draggable',
+      component: () => import('@/views/modules/draggable/Main.vue'),
       children: [],
     },
   ],

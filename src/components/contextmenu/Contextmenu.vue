@@ -1,47 +1,57 @@
 <template>
-  <div class="fixed bg-white min-w-[240px]" :style="style" v-if="visible">
-    <ul class="p-2">
-      <li
-        class="flex items-center justify-between h-[32px] hover:bg-blue-100"
-        v-for="item in list"
-        @click="onClick(item)"
-      >
-        <div class="icon w-[24px] h-[24px]">
-          <component :is="item.icon" v-if="item.icon"></component>
-        </div>
-        <div class="flex-1">{{ item.title }}</div>
-        <div>
-          <div class="icon w-[24px] h-[24px] flex items-center">
-            <CaretRightOutlined />
-          </div>
-        </div>
-      </li>
-    </ul>
+  <div v-show="visible">
+    <div class="fixed min-w-[240px]" :style="style" ref="elRef">
+      <SubContextmenu v-model:position="menuPlacement" @visible="visible = false" :data="data" />
+    </div>
   </div>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" generic="ContextmenuConfig">
+import { onClickOutside } from '@vueuse/core';
+
+const menuPlacement = ref('left-full');
+type ContextmenuConfig = {
+  data: ContextmenuProps[];
+  left?: number;
+  top?: number;
+  evt?: MouseEvent;
+}
+const props = defineProps<ContextmenuConfig>();
+const elRef = ref<HTMLElement>();
+
 const position = ref({
   left: 0,
   top: 0,
 });
 
-const visible = ref();
+const visible = defineModel<boolean>('visible');
 
-const onClick = (item: ContextmenuProps) => {
-  item.onClick && item.onClick();
-  visible.value = false;
+nextTick(() => {
+  onClickOutside(elRef, () => {
+    visible.value = false;
+  });
+});
+
+const contextmenu = (e: MouseEvent) => {
+  visible.value = true;
+  position.value.left = e.x;
+  position.value.top = e.y;
+  nextTick(() => {
+    if (elRef.value) {
+      const domRect = elRef.value.getBoundingClientRect();
+      if (domRect.width + domRect.left > innerWidth) {
+        position.value.left = innerWidth - domRect.width;
+        menuPlacement.value = 'right-full';
+        return;
+      }
+      if (domRect.height + domRect.top > innerHeight) {
+        position.value.top = innerHeight - domRect.height;
+      }
+      menuPlacement.value = 'left-full';
+    }
+  });
+  e.preventDefault();
 };
-const list = ref<ContextmenuProps[]>([
-  {
-    title: '标题-1',
-    icon: '',
-    children: [],
-    onClick() {
-      console.log('Click');
-    },
-  },
-]);
 
 const style = computed(() => {
   return {
@@ -49,14 +59,31 @@ const style = computed(() => {
     top: `${position.value.top}px`,
   };
 });
-const contextmenu = (e: MouseEvent) => {
-  position.value.left = e.x;
-  position.value.top = e.y;
-  visible.value = true;
-  e.preventDefault();
-};
 
-document.addEventListener('contextmenu', contextmenu);
+watch(
+  props,
+  () => {
+    position.value.left = props.left || 0;
+    position.value.top = props.top || 0;
+
+    if (props.evt) {
+      contextmenu(props.evt);
+    } else {
+      document.addEventListener('contextmenu', contextmenu);
+    }
+  },
+  {
+    immediate: true,
+    deep: true,
+  },
+);
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.icon {
+  border-radius: 6px;
+}
+.items {
+  cursor: pointer;
+}
+</style>
