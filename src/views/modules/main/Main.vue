@@ -20,6 +20,7 @@
         ></DraggableGroup>
       </div>
     </div>
+    <Contextmenu />
   </div>
 </template>
 
