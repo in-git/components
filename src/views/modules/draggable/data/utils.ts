@@ -1,8 +1,8 @@
-import { config } from '../config';
-import { current } from '../data';
+import { stageConfig } from './config';
+import { current } from './data';
 
 export const lines = ref<AssistLine[]>([]);
-const grid = config.value.grid![0];
+const grid = stageConfig.value.grid.x;
 
 const getTarget = (id: string) => {
   return lines.value.find(e => {

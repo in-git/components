@@ -64,8 +64,13 @@ interface DraggableConfig {
   enableNativeDrag?: boolean;
   /* 是否允许多选 */
   multipleSelect?: boolean;
-  grid?: [number, number];
+  grid: {
+    x: number;
+    y: number;
+  };
   showGrid?: boolean;
   parent?: string | boolean;
   scale?: number;
+  width: number;
+  height: number;
 }

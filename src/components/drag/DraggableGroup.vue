@@ -16,7 +16,7 @@
       @mousedown.stop="onMousedown(item)"
       :axis="item.axis"
       :disableUserSelect="config.disableUserSelect"
-      :grid="config.grid"
+      :grid="[config.grid.x, config.grid.y]"
       :showGrid="config.showGrid"
       :scale="config.scale"
       :active="item.active"

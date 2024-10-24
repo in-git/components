@@ -1,15 +1,17 @@
 import { nanoid } from 'nanoid';
-import { config } from './config';
 import { addHistory } from '@/components/history/history';
-import { useCloned } from '@vueuse/core';
+import { useCloned, useDateFormat, useNow } from '@vueuse/core';
+import { stageConfig } from './config';
+import { getCurrentTime } from '@/utils/common/bin';
 
 export const frameList = ref<Draggable[]>([]);
 
 export const selected = ref<Draggable[]>([]);
 
 export const current = ref<Draggable>();
+
 export const addSelected = (item: Draggable) => {
-  if (config.value.multipleSelect) {
+  if (stageConfig.value.multipleSelect) {
     const target = selected.value.findIndex(e => {
       return e.id === item.id;
     });
@@ -35,6 +37,7 @@ export const createNode = () => {
   addHistory({
     name: '创建图形',
     data: useCloned(frameList.value).cloned.value,
+    time: getCurrentTime(),
   });
 };
 export const menuItems: ContextmenuProps[] = [

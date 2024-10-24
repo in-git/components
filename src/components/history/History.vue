@@ -22,9 +22,9 @@
                 </template>
               </a-button>
             </a-tooltip>
-            <a-button size="small" type="text" @click="visible = false">
+            <a-button size="small" type="text" @click="clear">
               <template #icon>
-                <CloseOutlined />
+                <DeleteOutlined />
               </template>
             </a-button>
           </div>
@@ -37,15 +37,18 @@
           >
             <li
               @click="selectItem(item, key)"
-              class="py-2 pl-4 bg-gray-50 flex justify-between item cursor-pointer"
+              class="py-2 pl-4 bg-gray-50 flex justify-between item cursor-pointer hover:bg-gray-200"
               v-for="(item, key) in historyList"
               :class="{ active: key === pointer }"
             >
-              <div class="flex">
+              <div class="flex items-center">
                 <div class="w-[24px]">
-                  {{ key }}
+                  {{ key + 1 }}
                 </div>
-                <div>{{ item.name }}</div>
+                <div class="text-[12px] mr-2">{{ item.name }}</div>
+                <div class="text-[12px]">
+                  {{ item.time }}
+                </div>
               </div>
               <div class="flex gap-2">
                 <div class="actions w-[24px]" @click.stop="del(item)">
@@ -67,7 +70,6 @@
 <script setup lang="ts">
 import {
   ArrowLeftOutlined,
-  CloseOutlined,
   DeleteOutlined,
   HistoryOutlined,
   RedoOutlined,
@@ -81,7 +83,9 @@ const selectItem = (item: RedoHistory, k: number) => {
   pointer.value = k;
   data.value = item.data;
 };
-
+const clear = () => {
+  historyList.value = [];
+};
 const redo = () => {
   data.value = redoHistory();
 };

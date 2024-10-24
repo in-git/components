@@ -2,7 +2,7 @@
   <div>
     <div class="flex">
       <a-button>分组</a-button>
-      <a-input-number class="w-fit" v-model:value="config.scale"></a-input-number>
+      <a-input-number class="w-fit" v-model:value="stageConfig.scale"></a-input-number>
 
       <div v-if="current && typeof current.parent === 'boolean'">
         限制出界
@@ -13,8 +13,8 @@
 </template>
 
 <script setup lang="ts">
-import { config } from './config';
-import { current } from './data';
+import { stageConfig } from './data/config';
+import { current } from './data/data';
 </script>
 
 <style lang="scss" scoped></style>
