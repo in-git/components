@@ -21,14 +21,14 @@
           </div>
         </div>
         <template v-if="item.expand">
-          <DraggableTree
+          <Tree
             class="hover:bg-blue-100"
             :deep="getTreeDepth(item)"
             v-if="item.children"
             @select="selectChild"
             :data="item.children"
             :selected-keys="selectedKeys"
-          ></DraggableTree>
+          ></Tree>
         </template>
       </div>
     </div>
@@ -36,22 +36,22 @@
 </template>
 
 <script setup lang="ts">
+import { getTreeDepth } from '@/utils/common/tree.utils';
 import { useCloned } from '@vueuse/core';
 import { useSortable } from '@vueuse/integrations/useSortable';
-import { getTreeDepth } from './utils';
 
 const emit = defineEmits(['select']);
 
 const elRef = ref();
 
-const selectedKeys = defineModel<DraggableTree[]>('selectedKeys');
+const selectedKeys = defineModel<Tree[]>('selectedKeys');
 
 const props = defineProps<{
-  data: DraggableTree[];
+  data: Tree[];
   deep?: number;
 }>();
 
-const include = (item: DraggableTree) => {
+const include = (item: Tree) => {
   if (!selectedKeys.value) return false;
   return (
     selectedKeys.value?.findIndex(v => {
@@ -59,10 +59,10 @@ const include = (item: DraggableTree) => {
     }) !== -1
   );
 };
-const selectNode = (item: DraggableTree) => {
+const selectNode = (item: Tree) => {
   emit('select', item);
 };
-const selectChild = (item: DraggableTree) => {
+const selectChild = (item: Tree) => {
   nextTick(() => {
     emit('select', item);
   });

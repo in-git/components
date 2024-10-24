@@ -1,8 +1,6 @@
 <template>
-  <div v-show="visible">
-    <div class="fixed min-w-[240px]" :style="style" ref="elRef">
-      <SubContextmenu v-model:position="menuPlacement" @visible="visible = false" :data="data" />
-    </div>
+  <div v-show="visible" class="fixed min-w-[200px]" :style="style" ref="elRef">
+    <SubContextmenu v-model:position="menuPlacement" @visible="visible = false" :data="data" />
   </div>
 </template>
 
@@ -15,7 +13,7 @@ type ContextmenuConfig = {
   left?: number;
   top?: number;
   evt?: MouseEvent;
-}
+};
 const props = defineProps<ContextmenuConfig>();
 const elRef = ref<HTMLElement>();
 
@@ -39,15 +37,18 @@ const contextmenu = (e: MouseEvent) => {
   nextTick(() => {
     if (elRef.value) {
       const domRect = elRef.value.getBoundingClientRect();
+      if (domRect.height + domRect.top > innerHeight) {
+        position.value.top = innerHeight - domRect.height;
+        menuPlacement.value = 'left-full';
+      } else {
+        menuPlacement.value = 'right-full';
+      }
       if (domRect.width + domRect.left > innerWidth) {
         position.value.left = innerWidth - domRect.width;
         menuPlacement.value = 'right-full';
-        return;
+      } else {
+        menuPlacement.value = 'left-full';
       }
-      if (domRect.height + domRect.top > innerHeight) {
-        position.value.top = innerHeight - domRect.height;
-      }
-      menuPlacement.value = 'left-full';
     }
   });
   e.preventDefault();

@@ -1,6 +1,6 @@
 type DraggableHandles = 'tm' | 'bm' | 'ml' | 'mr';
 
-interface DraggableTree {
+interface Tree {
   /* 是否展开 */
   expand?: boolean;
   /* 是否编辑 */
@@ -10,7 +10,7 @@ interface DraggableTree {
   [key: string]: any;
 }
 
-interface Draggable extends DraggableTree {
+interface Draggable extends Tree {
   w: number;
   h: number;
   x: number;
@@ -35,6 +35,7 @@ interface Draggable extends DraggableTree {
   preventDeactivation?: boolean;
   type?: string;
   name?: string;
+  icon?: string;
 }
 interface DraggableEvent {
   onDragStart?: (e?: MouseEvent) => any;
@@ -50,6 +51,7 @@ interface DraggableEvent {
 }
 
 interface DraggableConfig {
+  activeOnHover: boolean;
   classNameDraggable?: string;
   classNameResizable?: string;
   classNameDragging?: string;

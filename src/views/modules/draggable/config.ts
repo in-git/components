@@ -8,4 +8,5 @@ export const config = ref<DraggableConfig>({
   grid: [5, 5],
   parent: '#test-parent',
   scale: 1,
+  activeOnHover: false,
 });

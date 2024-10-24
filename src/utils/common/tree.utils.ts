@@ -1,4 +1,8 @@
-export const getTreeDepth = (node: Draggable | DraggableTree): number => {
+/**
+ * 获取树的深度
+ * 用于计算子节点相对父元素的偏移量
+ */
+export const getTreeDepth = (node: Tree): number => {
   if (!node.children || node.children.length === 0) {
     return node.treeDeep || 0; // 返回当前节点的深度或 0
   }
@@ -10,8 +14,19 @@ export const getTreeDepth = (node: Draggable | DraggableTree): number => {
   return Math.max(...childDepths) + 1; // 加 1 代表当前节点的深度
 };
 
-export const getAllParentNodes = (nodes: Draggable[], currentId?: string): Draggable[] => {
-  const parentNodes: Draggable[] = [];
+type TreeNode = {
+  id: string;
+  children?: TreeNode[];
+  [key: string]: any;
+};
+
+/**
+ * 获取树中所有的父级节点
+ * 可用于面包屑导航，高亮父级节点
+ */
+
+export const getAllParentNodes = (nodes: TreeNode[], currentId?: string): TreeNode[] => {
+  const parentNodes: TreeNode[] = [];
 
   const findParents = (id: string | boolean) => {
     const parent = nodes.find(draggable => draggable.id === id);

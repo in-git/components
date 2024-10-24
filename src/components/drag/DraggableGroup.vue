@@ -25,7 +25,7 @@
       :handles="item.handles"
       :lockAspectRatio="item.lockAspectRatio"
       :enableNativeDrag="config.enableNativeDrag"
-      :activeOnHover="item.activeOnHover || true"
+      :activeOnHover="config.activeOnHover"
       :preventDeactivation="item.preventDeactivation"
       :classNameDraggable="config.classNameDraggable"
       class="drag-class"

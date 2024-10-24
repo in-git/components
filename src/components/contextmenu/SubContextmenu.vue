@@ -2,7 +2,7 @@
   <ul class="p-2 bg-white subs" v-show="data.length > 0" ref="subRef">
     <template v-for="item in data">
       <li
-        class=" relative"
+        class="relative"
         @click="onClick(item)"
         :class="{ 'pointer-events-none text-gray-400 ': item.disabled }"
       >
@@ -56,7 +56,6 @@ const onClick = (item: ContextmenuProps) => {
   emit('visible', false);
 };
 console.log(position.value);
-
 </script>
 
 <style lang="scss" scoped>
@@ -68,6 +67,7 @@ console.log(position.value);
   opacity: 0;
 }
 .items {
+  border-radius: var(--radius);
   &:hover {
     & > .subs-contextmenu {
       opacity: 1;

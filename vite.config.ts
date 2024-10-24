@@ -32,7 +32,7 @@ export default defineConfig(() => {
     server: {
       /* 是否自动打开，在linux上运行请关闭，否则会报错 */
       open: true,
-      port: 4567,
+      port: 6677,
       hmr: true,
       headers: {
         'Cross-Origin-Embedder-Policy': 'require-corp',
