@@ -1,6 +1,7 @@
 import { nanoid } from 'nanoid';
 import { config } from './config';
 import { addHistory } from '@/components/history/history';
+import { useCloned } from '@vueuse/core';
 
 export const frameList = ref<Draggable[]>([]);
 
@@ -33,7 +34,7 @@ export const createNode = () => {
   });
   addHistory({
     name: '创建图形',
-    data: frameList.value,
+    data: useCloned(frameList.value).cloned.value,
   });
 };
 export const menuItems: ContextmenuProps[] = [

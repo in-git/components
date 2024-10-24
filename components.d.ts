@@ -18,6 +18,7 @@ declare module 'vue' {
     APopover: typeof import('ant-design-vue/es')['Popover']
     ATable: (typeof import('ant-design-vue/es'))['Table']
     ATag: (typeof import('ant-design-vue/es'))['Tag']
+    ATooltip: typeof import('ant-design-vue/es')['Tooltip']
     CaretRightOutlined: typeof import('@ant-design/icons-vue')['CaretRightOutlined']
     Contextmenu: typeof import('./src/components/contextmenu/Contextmenu.vue')['default']
     DraggableGroup: typeof import('./src/components/drag/DraggableGroup.vue')['default']

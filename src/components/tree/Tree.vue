@@ -76,6 +76,7 @@ nextTick(() => {
 
 <style lang="scss" scoped>
 .tree-item {
+  border-radius: 2px;
   .actions {
     opacity: 0;
   }

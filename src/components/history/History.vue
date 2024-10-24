@@ -8,18 +8,20 @@
     <template #content>
       <div class="w-[300px]">
         <div class="flex justify-between items-center">
-          <div>历史记录</div>
+          <div class="font-bold text-[1rem]">历史记录</div>
           <div class="flex gap-1">
-            <a-button size="small" type="text">
+            <a-button size="small" type="text" @click="redo">
               <template #icon>
                 <RedoOutlined />
               </template>
             </a-button>
-            <a-button size="small" type="text">
-              <template #icon>
-                <UndoOutlined />
-              </template>
-            </a-button>
+            <a-tooltip title="反撤销">
+              <a-button size="small" type="text" @click="undo">
+                <template #icon>
+                  <UndoOutlined />
+                </template>
+              </a-button>
+            </a-tooltip>
             <a-button size="small" type="text" @click="visible = false">
               <template #icon>
                 <CloseOutlined />
@@ -34,9 +36,10 @@
             v-if="historyList.length > 0"
           >
             <li
-              @click="selectItem(key)"
+              @click="selectItem(item, key)"
               class="py-2 pl-4 bg-gray-50 flex justify-between item cursor-pointer"
               v-for="(item, key) in historyList"
+              :class="{ active: key === pointer }"
             >
               <div class="flex">
                 <div class="w-[24px]">
@@ -45,7 +48,7 @@
                 <div>{{ item.name }}</div>
               </div>
               <div class="flex gap-2">
-                <div class="actions w-[24px]">
+                <div class="actions w-[24px]" @click.stop="del(item)">
                   <DeleteOutlined />
                 </div>
                 <div class="w-[24px]">
@@ -70,11 +73,24 @@ import {
   RedoOutlined,
   UndoOutlined,
 } from '@ant-design/icons-vue';
-import { historyList, pointer } from './history';
+import { historyList, pointer, redoHistory, undoHistory } from './history';
 
+const data = defineModel('data');
 const visible = ref(false);
-const selectItem = (k: number) => {
+const selectItem = (item: RedoHistory, k: number) => {
   pointer.value = k;
+  data.value = item.data;
+};
+
+const redo = () => {
+  data.value = redoHistory();
+};
+
+const del = (item: RedoHistory) => {
+  historyList.value = historyList.value.filter(v => v.id !== item.id);
+};
+const undo = () => {
+  data.value = undoHistory();
 };
 </script>
 
@@ -93,5 +109,10 @@ button {
       opacity: 1;
     }
   }
+}
+.active {
+  background: var(--primary);
+  color: white;
+  border-radius: var(--radius);
 }
 </style>

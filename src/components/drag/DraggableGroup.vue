@@ -32,6 +32,7 @@
       @click="onClick(item)"
       :parent="parent"
       @dragging="dragging"
+      @dragstop="dragstop"
       :handlesSize="config.handlesSize || 4"
       :classNameActive="config.classNameActive || 'draggable-active'"
     >
@@ -50,7 +51,14 @@
 <script setup lang="ts">
 import VueDrag from 'draggable-resizable-vue3';
 
-const emit = defineEmits(['deactivated', 'activated', 'onClick', 'dragging', 'mousedown']);
+const emit = defineEmits([
+  'deactivated',
+  'activated',
+  'onClick',
+  'dragging',
+  'mousedown',
+  'dragstop',
+]);
 defineProps<{
   data: Draggable[];
   config: DraggableConfig;
@@ -64,7 +72,9 @@ const onMousedown = (item: Draggable) => {
 const onDeactivated = (item: Draggable) => {
   emit('deactivated', item);
 };
-
+const dragstop = () => {
+  emit('dragstop');
+};
 const activated = (item: Draggable) => {
   emit('activated', item);
 };
