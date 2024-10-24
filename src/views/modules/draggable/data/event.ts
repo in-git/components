@@ -1,8 +1,8 @@
-import { onKeyStroke, useMagicKeys } from '@vueuse/core';
+import { onKeyStroke, useEventListener, useMagicKeys } from '@vueuse/core';
 import { createHistory, delCurrent, moveX, moveY } from './operation';
-import { redoHistory, undoHistory } from '@/components/history/history';
 import { redoFrame, undoFrame } from './history';
-const { Ctrl_Z, Ctrl_Y } = useMagicKeys();
+import { stageConfig } from './config';
+const { Ctrl_Z, Ctrl_Y, Space } = useMagicKeys();
 
 onKeyStroke('ArrowDown', e => {
   e.preventDefault();
@@ -33,6 +33,7 @@ onKeyStroke('Delete', e => {
   createHistory('删除图形');
 });
 
+watch(Space, v => (stageConfig.value.allowDrag = v));
 watch(Ctrl_Z, v => {
   if (v) {
     redoFrame();
@@ -43,3 +44,13 @@ watch(Ctrl_Y, v => {
     undoFrame();
   }
 });
+
+export const stageWheelEvent = (e: WheelEvent) => {
+  if (e.deltaY < 0) {
+    if (stageConfig.value.scale <= 0.6) return;
+    stageConfig.value.scale -= 0.1;
+  } else {
+    if (stageConfig.value.scale >= 2) return;
+    stageConfig.value.scale += 0.1;
+  }
+};

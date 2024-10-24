@@ -70,7 +70,10 @@ interface DraggableConfig {
   };
   showGrid?: boolean;
   parent?: string | boolean;
-  scale?: number;
+  scale: number;
   width: number;
   height: number;
+  left: number;
+  top: number;
+  allowDrag: boolean;
 }

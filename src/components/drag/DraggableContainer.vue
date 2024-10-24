@@ -7,7 +7,7 @@
       v-model:w="item.w"
       v-model:h="item.h"
       :z-index="item.z"
-      :key="item.id"
+      :key="item.z"
       :draggable="item.draggable"
       :resizable="item.resizable"
       :id="item.id"
@@ -33,22 +33,34 @@
       :parent="parent"
       @dragging="dragging"
       @dragstop="dragstop"
+      @mouseleave="mouseleave"
+      @mouseenter="mouseenter(item)"
       :handlesSize="config.handlesSize || 4"
+      :class="{ 'hover-active': hoverTarget === item.id }"
       :classNameActive="config.classNameActive || 'draggable-active'"
     >
       <template v-if="!item.children || item.children.length === 0">
         <slot></slot>
       </template>
       <div v-else>
-        <DraggableGroup :data="item.children" :parent="getParent(item)" :config="config">
+        <DraggableContainer
+          :hover-target="hoverTarget"
+          :data="item.children"
+          :parent="getParent(item)"
+          @dragging="dragging"
+          @dragstop="dragstop"
+          @mouseleave="mouseleave"
+          :config="config"
+        >
           <slot></slot>
-        </DraggableGroup>
+        </DraggableContainer>
       </div>
     </VueDrag>
   </div>
 </template>
 
 <script setup lang="ts">
+import { hoverTarget } from '@/views/modules/draggable/data/data';
 import VueDrag from 'draggable-resizable-vue3';
 
 const emit = defineEmits([
@@ -58,15 +70,23 @@ const emit = defineEmits([
   'dragging',
   'mousedown',
   'dragstop',
+  'mouseenter',
+  'mouseleave',
 ]);
 defineProps<{
   data: Draggable[];
   config: DraggableConfig;
   parent?: string | boolean;
+  hoverTarget: string;
 }>();
-
+const mouseenter = (item: Draggable) => {
+  emit('mouseenter', item);
+};
 const onMousedown = (item: Draggable) => {
   emit('mousedown', item);
+};
+const mouseleave = (item: Draggable) => {
+  emit('mouseleave', item);
 };
 
 const onDeactivated = (item: Draggable) => {
@@ -102,30 +122,33 @@ const getParent = (item: Draggable) => {
   outline: 1px solid transparent;
   border-style: solid;
 }
+.hover-active {
+  background-color: #94d6fd44;
+}
 :deep(.drv-borders) {
   z-index: 100;
   .drv-handle {
     background: transparent;
 
-    &:hover {
-      background: rgb(16, 188, 231);
-    }
+    // &:hover {
+    //   background: rgb(16, 188, 231);
+    // }
   }
-  .drv-handle-mr {
-    border-radius: 4px;
-    transform: translate(100%, 0);
-  }
-  .drv-handle-ml {
-    border-radius: 4px;
-    transform: translate(-100%, 0);
-  }
-  .drv-handle-tm {
-    border-radius: 4px;
-    transform: translate(0, -100%) !important;
-  }
-  .drv-handle-bm {
-    border-radius: 4px;
-    transform: translate(0, 100%) !important;
-  }
+  // .drv-handle-mr {
+  //   border-radius: 4px;
+  //   transform: translate(100%, 0);
+  // }
+  // .drv-handle-ml {
+  //   border-radius: 4px;
+  //   transform: translate(-100%, 0);
+  // }
+  // .drv-handle-tm {
+  //   border-radius: 4px;
+  //   transform: translate(0, -100%) !important;
+  // }
+  // .drv-handle-bm {
+  //   border-radius: 4px;
+  //   transform: translate(0, 100%) !important;
+  // }
 }
 </style>

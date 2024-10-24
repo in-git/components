@@ -14,4 +14,7 @@ export const stageConfig = ref<DraggableConfig>({
   activeOnHover: false,
   width: 600,
   height: 600,
+  left: 0,
+  top: 0,
+  allowDrag: false,
 });

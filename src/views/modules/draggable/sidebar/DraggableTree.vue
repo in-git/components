@@ -1,10 +1,10 @@
 <template>
   <div ref="elRef">
-    <div v-for="(item, key) in data" :key="key">
+    <div v-for="item in data" :key="item.z">
       <div>
         <div
           class="flex items-center cursor-pointer tree-item py-1 hover:bg-blue-100"
-          :class="{ active: include(item) }"
+          :class="[{ active: include(item) }, { 'bg-blue-100': item.id === hoverTarget }]"
           @click.stop="selectNode(item)"
           @mouseenter="mouseenter(item)"
           @mouseleave="mouseleave"
@@ -17,13 +17,13 @@
               :rotate="item.expand ? 90 : 0"
             />
           </div>
-          <div class="flex-1">{{ item.name }}</div>
+          <div class="flex-1">{{ item.name }}{{ item.z }}</div>
           <div class="flex actions mr-2">
             <EditOutlined />
           </div>
         </div>
         <template v-if="item.expand">
-          <Tree
+          <DraggableTree
             class="hover:bg-blue-100"
             :deep="getTreeDepth(item)"
             v-if="item.children"
@@ -31,8 +31,9 @@
             @mouseenter="mouseenter"
             @mouseleave="mouseleave"
             :data="item.children"
+            :hover-target="hoverTarget"
             :selected-keys="selectedKeys"
-          ></Tree>
+          ></DraggableTree>
         </template>
       </div>
     </div>
@@ -51,6 +52,7 @@ const selectedKeys = defineModel<Tree[]>('selectedKeys');
 const data = defineModel<Tree[]>('data');
 const props = defineProps<{
   deep?: number;
+  hoverTarget: string;
 }>();
 console.log(props);
 

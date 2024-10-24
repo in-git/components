@@ -55,7 +55,6 @@ const onClick = (item: ContextmenuProps) => {
   item.onClick && item.onClick();
   emit('visible', false);
 };
-console.log(position.value);
 </script>
 
 <style lang="scss" scoped>

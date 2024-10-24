@@ -79,6 +79,7 @@ import { historyList, pointer, redoHistory, undoHistory } from './history';
 
 const data = defineModel('data');
 const visible = ref(false);
+
 const selectItem = (item: RedoHistory, k: number) => {
   pointer.value = k;
   data.value = item.data;
